@@ -12,9 +12,6 @@ const sc1 = document.getElementById('sc1');
 const sc2 = document.getElementById('sc2');
 const sc3 = document.getElementById('sc3');
 
- 
-
-
 let options = {weekday: 'long', month: 'short', year:'numeric', day: 'numeric'};
 
 setInterval(()  => {
@@ -29,7 +26,6 @@ setInterval(()  => {
     document.getElementsByClassName('date')[0].innerHTML = mosDay;
     document.getElementsByClassName('date')[1].innerHTML = tokDay;
     document.getElementsByClassName('date')[2].innerHTML = lonDay;
-
 
     let h = data.getHours() * 30;
     let m = data.getMinutes() * deg;
