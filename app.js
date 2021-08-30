@@ -1,35 +1,46 @@
 const deg = 6;
+const options = {weekday: 'long', month: 'short', year:'numeric', day: 'numeric'};
+const day = document.getElementsByClassName('date');
 
-const hr1 = document.getElementById('hr1');
-const hr2 = document.getElementById('hr2');
-const hr3 = document.getElementById('hr3');
+function today(opt, city) {
+    return Intl.DateTimeFormat('en-US', opt).format(city);
+}
 
-const mn1 = document.getElementById('mn1');
-const mn2 = document.getElementById('mn2');
-const mn3 = document.getElementById('mn3');
+class Clock {
+    constructor(idCity, idHour, idMin, idSec) {
+        this.hr = document.getElementById(idHour);
+        this.mn = document.getElementById(idMin);
+        this.sc = document.getElementById(idSec);
+        this.city = document.getElementById(idCity);
+    }
+    transform(h, m ,s) {
+        this.hr.style.transform = `rotateZ(${h+m/12}deg)`;
+        this.mn.style.transform = `rotateZ(${m}deg)`;
+        this.sc.style.transform = `rotateZ(${s}deg)`;
+    }
+}
 
-const sc1 = document.getElementById('sc1');
-const sc2 = document.getElementById('sc2');
-const sc3 = document.getElementById('sc3');
+let mosTime = new Clock('mos', 'hr1', 'mn1', 'sc1');
+let tokTime = new Clock('tok', 'hr2', 'mn2', 'sc2');
+let lonTime = new Clock('lon', 'hr3', 'mn3', 'sc3');
 
-let options = {weekday: 'long', month: 'short', year:'numeric', day: 'numeric'};
 
 setInterval(()  => {
-    let data = new Date();
-    let tok = new Date(data.getTime() + 6*3600000);
-    let lon = new Date(data.getTime() + 3600000*(-2))
+    let mos = new Date();
+    let tok = new Date(mos.getTime() + 6*3600000);
+    let lon = new Date(mos.getTime() + 3600000*(-2))
 
-    let mosDay = Intl.DateTimeFormat('en-US', options).format(data);
-    let tokDay = Intl.DateTimeFormat('en-US', options).format(tok);
-    let lonDay = Intl.DateTimeFormat('en-US', options).format(lon);
+    let mosDay = today(options, mos);
+    let tokDay = today(options, tok);
+    let lonDay = today(options, lon);
 
-    document.getElementsByClassName('date')[0].innerHTML = mosDay;
-    document.getElementsByClassName('date')[1].innerHTML = tokDay;
-    document.getElementsByClassName('date')[2].innerHTML = lonDay;
+    day[0].innerText = mosDay;
+    day[1].innerText = tokDay;
+    day[2].innerText = lonDay;
 
-    let h = data.getHours() * 30;
-    let m = data.getMinutes() * deg;
-    let s = data.getSeconds() * deg;
+    let hmos = mos.getHours() * 30;
+    let mmos = mos.getMinutes() * deg;
+    let smos = mos.getSeconds() * deg;
 
     let htok = tok.getHours() * 30;
     let mtok = tok.getMinutes() * deg;
@@ -39,15 +50,8 @@ setInterval(()  => {
     let mlon = lon.getMinutes() * deg;
     let slon = lon.getSeconds() * deg;
 
-    hr1.style.transform=`rotateZ(${h+m/12}deg)`;
-    mn1.style.transform=`rotateZ(${m}deg)`;
-    sc1.style.transform=`rotate(${s}deg)`;
+    mosTime.transform(hmos, mmos, smos);
+    tokTime.transform(htok, mtok, stok);
+    lonTime.transform(hlon, mlon, slon);
 
-    hr2.style.transform=`rotateZ(${htok+mtok/12}deg)`;
-    mn2.style.transform=`rotateZ(${mtok}deg)`;
-    sc2.style.transform=`rotate(${stok}deg)`;
-
-    hr3.style.transform=`rotateZ(${hlon+mlon/12}deg)`;
-    mn3.style.transform=`rotateZ(${mlon}deg)`;
-    sc3.style.transform=`rotate(${slon}deg)`;
-})
+  }, 1000)
